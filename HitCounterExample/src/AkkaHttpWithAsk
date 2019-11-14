@@ -1,0 +1,48 @@
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.model._
+import akka.http.scaladsl.server.Directives._
+import akka.stream.ActorMaterializer
+import akka.pattern.ask
+import akka.util.Timeout
+
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Future
+import scala.concurrent.duration._
+import scala.io.StdIn
+
+object AkkaHttpWithAsk {
+
+
+  final case object fetch
+  class ActorClass extends Actor with ActorLogging {
+    private var count:Int = 0
+    def receive = {
+      case fetch =>
+        count += count
+        sender ! count
+    }
+  }
+
+
+  def main(args: Array[String]) {
+    implicit val system = ActorSystem("my-system")
+    implicit val materializer = ActorMaterializer()
+    implicit val executionContext = system.dispatcher
+
+    val actor1 = system.actorOf(Props[ActorClass], "SimpleActor")
+
+      val route =
+        pathEndOrSingleSlash {
+          // Waits for the actor to send back a response
+          implicit val timeout = Timeout(5.seconds)
+          val future2: Future[Int] = ask(actor1, fetch).mapTo[Int]
+          val result = Await.result(future2, 10 second)
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>You visited ($result) times</h1>"))
+        }
+
+      Http().bindAndHandle(route, "localhost", 8080)
+      println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
+      StdIn.readLine() // let it run until user presses return
+  }
+}
