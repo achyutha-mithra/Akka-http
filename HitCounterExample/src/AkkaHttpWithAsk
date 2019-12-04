@@ -15,11 +15,11 @@ object HitCounterImpFinal {
   final case object fetch
 
   class ActorClass extends Actor with ActorLogging {
-    private var number: Int = 0
-
+    
+    private val number = new AtomicInteger()
     def receive = {
       case fetch =>
-        number += 1
+        number.incrementAndGet()
         context.sender() ! number
     }
   }
