@@ -16,7 +16,7 @@ import scala.io.StdIn
 object AkkaHttpWithoutAsk {
 
   //Count variable to keep track of Hits on a particular URL
-  private var count:Int = 0
+  val count = new AtomicInteger()
   final case class Inc()
   final case class fetch()
   class ActorClass extends Actor with ActorLogging {
@@ -24,7 +24,7 @@ object AkkaHttpWithoutAsk {
   // Receive just performs incrementation of Count variable
     def receive = {
       case Inc =>
-        count = (count + 1)
+        count.incrementAndGet()
     }
   }
 
