@@ -16,7 +16,7 @@ object HitCounterImpFinal {
 
   class ActorClass extends Actor with ActorLogging {
     
-    private val number = new AtomicInteger()
+    private val number = new AtomicInteger() // thread-safe programming on single variables
     def receive = {
       case fetch =>
         number.incrementAndGet()
