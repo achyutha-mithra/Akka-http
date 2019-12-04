@@ -81,7 +81,6 @@ object AkkaWithDatabase {
         val finalresult = result+"-"+result2
         actor1 ! fetch1(finalresult)
         complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>Hello</h1> <"))
-
       }
 
 
