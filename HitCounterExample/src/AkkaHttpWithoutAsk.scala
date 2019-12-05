@@ -19,7 +19,7 @@ object AkkaHttpWithoutAsk {
   val count = new AtomicInteger() // thread-safe programming on single variables
   final case class Inc()
   final case class fetch()
-  class ActorClass extends Actor with ActorLogging {
+  class ActorClass extends Actor  {
  
   // Receive just performs incrementation of Count variable
     def receive = {
