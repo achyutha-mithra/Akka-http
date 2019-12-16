@@ -69,19 +69,38 @@ object AkkaWithDatabase {
     val actor1 = system.actorOf(Props[ActorA], "SimpleActor1")
 
     val route =
-      pathEndOrSingleSlash {
+      concat(
+      path("path1") {
+
         val rand = new Random(System.currentTimeMillis())
-
-        val random_index = rand.nextInt(A.length)
-        val result = A(random_index)
-
         val random_index2 = rand.nextInt(hr.length)
-        val result2 = hr(random_index2)
+        val hour = hr(random_index2)
+        val finalresult = "path1-"+hour
 
-        val finalresult = result+"-"+result2
         actor1 ! fetch1(finalresult)
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>Hello</h1> <"))
-      }
+        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>Path1: Hello</h1> <"))
+      },
+        path("path2") {
+
+          val rand = new Random(System.currentTimeMillis())
+          val random_index2 = rand.nextInt(hr.length)
+          val hour = hr(random_index2)
+          val finalresult = "path2-"+hour
+
+          actor1 ! fetch1(finalresult)
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>Path2: Hello</h1> <"))
+        },
+        path("path3") {
+
+          val rand = new Random(System.currentTimeMillis())
+          val random_index2 = rand.nextInt(hr.length)
+          val hour = hr(random_index2)
+          val finalresult = "path3-"+hour
+
+          actor1 ! fetch1(finalresult)
+          complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, s"<h1>Path3: Hello</h1> <"))
+        }
+      )
 
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
