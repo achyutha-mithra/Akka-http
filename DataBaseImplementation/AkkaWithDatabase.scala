@@ -69,7 +69,7 @@ object AkkaWithDatabase {
     val actor1 = system.actorOf(Props[ActorA], "SimpleActor1")
 
     val route =
-      path("hi") {
+      pathEndOrSingleSlash {
         val rand = new Random(System.currentTimeMillis())
 
         val random_index = rand.nextInt(A.length)
