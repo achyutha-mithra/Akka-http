@@ -63,7 +63,6 @@ object AkkaWithDatabase {
     implicit val executionContext = system.dispatcher
     implicit val timeout: Timeout = 1.seconds
 
-    val A = Array("path1", "path2", "path3")
     val hr = Array (1,2,3,4,5,6,7,8,9,10)
 
     val actor1 = system.actorOf(Props[ActorA], "SimpleActor1")
